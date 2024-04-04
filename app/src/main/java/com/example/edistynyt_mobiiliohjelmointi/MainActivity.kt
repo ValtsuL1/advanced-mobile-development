@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -20,9 +21,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.edistynyt_mobiiliohjelmointi.ui.theme.Edistynyt_mobiiliohjelmointiTheme
+import com.example.edistynyt_mobiiliohjelmointi.viewmodel.LoginViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,25 +46,26 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun LoginScreen(){
-    val username = remember{
-        mutableStateOf("")
-    }
-    val password = remember {
-        mutableStateOf("")
-    }
+fun LoginScreen() {
+    val loginVm: LoginViewModel = viewModel()
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        OutlinedTextField(value = username.value, onValueChange = { newUsername -> username.value = newUsername
+        OutlinedTextField(value = loginVm.loginState.value.username, onValueChange = { newUsername ->
+            loginVm.setUsername(newUsername)
         }, placeholder = {
             Text(text = "Username")
         })
         Spacer(modifier = Modifier.height(16.dp))
-        OutlinedTextField(value = password.value, onValueChange = { newPassword -> password.value = newPassword
+        OutlinedTextField(value = loginVm.loginState.value.password, onValueChange = { newPassword ->
+            loginVm.setPassword(newPassword)                                                                         
         }, placeholder = {
             Text(text = "Password")
-        })
+        }, visualTransformation = PasswordVisualTransformation())
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = { loginVm.login() }) {
+            Text(text = "Login")
+        }
     }
 }
