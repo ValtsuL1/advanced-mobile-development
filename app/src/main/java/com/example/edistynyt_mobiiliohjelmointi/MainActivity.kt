@@ -1,6 +1,7 @@
 package com.example.edistynyt_mobiiliohjelmointi
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Spacer
@@ -8,7 +9,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,7 +34,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.edistynyt_mobiiliohjelmointi.ui.theme.Edistynyt_mobiiliohjelmointiTheme
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,54 +50,75 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
                     val scope = rememberCoroutineScope()
+                    val navController = rememberNavController()
                     ModalNavigationDrawer(
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
                         drawerContent = {
                             ModalDrawerSheet {
                                 Spacer(modifier = Modifier.height(16.dp))
+
                                 NavigationDrawerItem(
                                     label = { Text(text = "Categories") },
                                     selected = true,
-                                    onClick = { /*TODO*/ },
+                                    onClick = {
+
+                                        scope.launch {
+                                            navController.navigate("categoriesScreen")
+                                            drawerState.close()
+                                        }
+                                    },
                                     icon = {
                                         Icon(
                                             imageVector = Icons.Filled.Home,
-                                            contentDescription = "Home")
-                                    })
+                                            contentDescription = "Home"
+                                        )
+                                    }
+                                )
+
+                                NavigationDrawerItem(
+                                    label = { Text(text = "Login") },
+                                    selected = true,
+                                    onClick = {
+
+                                        scope.launch {
+                                            navController.navigate("loginScreen")
+                                            drawerState.close()
+                                        }
+                                    },
+                                    icon = {
+                                        Icon(
+                                            imageVector = Icons.Filled.AccountCircle,
+                                            contentDescription = "Login"
+                                        )
+                                    }
+                                )
                             }
-                        }, drawerState = drawerState) {
-                        Text(text = "Welcome Home")
+                        }, drawerState = drawerState
+                    ){
+                        NavHost(
+                            navController = navController,
+                            startDestination = "loginScreen"
+                            ){
+
+                            composable(route = "categoriesScreen") {
+                                CategoriesScreen(onMenuClick = {
+                                    scope.launch {
+                                        drawerState.open()
+                                    }
+                                })
+                            }
+
+                            composable(route = "loginScreen") {
+                                LoginScreen(goToCategories = {
+                                    scope.launch {
+                                        navController.navigate("categoriesScreen")
+                                    }
+                                })
+                            }
+                        }
                     }
                 }
             }
         }
     }
 }
-
-@Composable
-fun AppNavigation(navController: NavHostController, onIconButtonClick: () -> Unit) {
-    NavHost(navController = navController, startDestination = "homescreen") {
-        composable(route = "homescreen") {
-            HomeScreen(onIconButtonClick)
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun HomeScreen(onIconButtonClick: () -> Unit) {
-    Scaffold (
-        topBar = {
-            TopAppBar(
-                title = { Text(text = "Home") },
-                navigationIcon = {
-                    IconButton(onClick = { onIconButtonClick() }) {
-                        Icon(Icons.Default.Menu, contentDescription = "Menu")
-                    }
-                })
-        },
-    ){
-        Text(text = "Home", modifier = Modifier.padding((it)))
-    }
-}
-
