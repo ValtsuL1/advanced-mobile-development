@@ -23,14 +23,9 @@ class LoginViewModel: ViewModel() {
         _loginState.value = loginState.value.copy(password = newPassword)
     }
 
-    private suspend fun _waitForLogin() {
-        delay(2000)
-    }
-
     fun login() {
         viewModelScope.launch {
             _loginState.value = loginState.value.copy(loading = true)
-            _waitForLogin()
             val user = LoginResModel()
             _loginState.value = loginState.value.copy(loading = false)
         }
