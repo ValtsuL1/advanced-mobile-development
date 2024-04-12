@@ -128,6 +128,10 @@ class MainActivity : ComponentActivity() {
                                     }
                                 })
                             }
+
+                            composable("postsScreen") {
+                                PostsScreen()
+                            }
                         }
                     }
                 }
