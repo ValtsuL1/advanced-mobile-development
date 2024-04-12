@@ -68,9 +68,7 @@ class MainActivity : ComponentActivity() {
                                         }
                                     },
                                     icon = {
-                                        Icon(
-                                            imageVector = Icons.Filled.Home,
-                                            contentDescription = "Home"
+                                        Icon(imageVector = Icons.Filled.Home, contentDescription = "Home"
                                         )
                                     }
                                 )
@@ -86,9 +84,7 @@ class MainActivity : ComponentActivity() {
                                         }
                                     },
                                     icon = {
-                                        Icon(
-                                            imageVector = Icons.Filled.AccountCircle,
-                                            contentDescription = "Login"
+                                        Icon(imageVector = Icons.Filled.AccountCircle, contentDescription = "Login"
                                         )
                                     }
                                 )

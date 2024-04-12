@@ -118,12 +118,12 @@ fun ConfirmCategoryDelete(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategory: (Int) -> Unit) {
-    val categoriesVm: CategoriesViewModel = viewModel()
+    val vm: CategoriesViewModel = viewModel()
     
     Scaffold(
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
-            FloatingActionButton(onClick = { categoriesVm.toggleAddCategory() }) {
+            FloatingActionButton(onClick = { vm.toggleAddCategory() }) {
                 Icon(imageVector = Icons.Filled.Add, contentDescription = "Add Category")
             }                   
         },
@@ -141,30 +141,30 @@ fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategory: (Int) -> U
             .padding(it)
         ){
             when {
-                categoriesVm.categoriesState.value.loading -> CircularProgressIndicator(
+                vm.categoriesState.value.loading -> CircularProgressIndicator(
                     modifier = Modifier.align(
                         Alignment.Center
                     )
                 )
 
-                categoriesVm.categoriesState.value.err != null -> Text(text = "Error: ${categoriesVm.categoriesState.value.err}")
+                vm.categoriesState.value.err != null -> Text(text = "Error: ${vm.categoriesState.value.err}")
 
-                categoriesVm.categoriesState.value.isAddingCategory -> AddCategoryDialog(
-                    addCategory = { categoriesVm.createCategory() },
-                        name = categoriesVm.addCategoryState.value.name,
-                        setName = {newName -> categoriesVm.setName(newName)},
-                        closeDialog = {categoriesVm.toggleAddCategory()}
+                vm.categoriesState.value.isAddingCategory -> AddCategoryDialog(
+                    addCategory = { vm.createCategory() },
+                        name = vm.addCategoryState.value.name,
+                        setName = {newName -> vm.setName(newName)},
+                        closeDialog = {vm.toggleAddCategory()}
                 )
 
-                categoriesVm.deleteCategoryState.value.id > 0 -> ConfirmCategoryDelete(
-                    onConfirm = { categoriesVm.deleteCategoryById(categoriesVm.deleteCategoryState.value.id) },
-                    onCancel = { categoriesVm.verifyCategoryRemoval(0) },
-                    clearErr = { categoriesVm.clearErr() },
-                    errStr = categoriesVm.deleteCategoryState.value.err
+                vm.deleteCategoryState.value.id > 0 -> ConfirmCategoryDelete(
+                    onConfirm = { vm.deleteCategoryById(vm.deleteCategoryState.value.id) },
+                    onCancel = { vm.verifyCategoryRemoval(0) },
+                    clearErr = { vm.clearErr() },
+                    errStr = vm.deleteCategoryState.value.err
                 )
 
                 else -> LazyColumn() {
-                    items(categoriesVm.categoriesState.value.list) {
+                    items(vm.categoriesState.value.list) {
                         Column(modifier = Modifier.fillMaxWidth()) {
                             Row(
                                 Modifier
@@ -181,7 +181,7 @@ fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategory: (Int) -> U
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis
                                     )
-                                    IconButton(onClick = { categoriesVm.verifyCategoryRemoval(it.id) }) {
+                                    IconButton(onClick = { vm.verifyCategoryRemoval(it.id) }) {
                                         Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
                                     }
                                     IconButton(onClick = { navigateToEditCategory(it.id) }) {
