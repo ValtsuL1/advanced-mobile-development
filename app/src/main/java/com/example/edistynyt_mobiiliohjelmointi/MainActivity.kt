@@ -96,15 +96,32 @@ class MainActivity : ComponentActivity() {
                             startDestination = "categoriesScreen"
                             ){
 
-                            composable(route = "categoriesScreen") {
+                            composable("categoriesScreen") {
                                 CategoriesScreen(onMenuClick = {
                                     scope.launch {
                                         drawerState.open()
                                     }
+                                }, navigateToEditCategory = {
+                                    navController.navigate("editCategoryScreen/${it}")
                                 })
                             }
 
-                            composable(route = "loginScreen") {
+                            composable("editCategoryScreen/{categoryId}") {
+
+                                EditCategoryScreen(backToCategories = {
+                                    navController.navigateUp()
+                                }, goToCategories = {
+                                    navController.navigate("categoriesScreen")
+                                })
+
+                                EditCategoryScreen(backToCategories = {
+                                    navController.navigateUp()
+                                }, goToCategories = {
+                                    navController.navigate("categoriesScreen")
+                                })
+                            }
+
+                            composable("loginScreen") {
                                 LoginScreen(goToCategories = {
                                     scope.launch {
                                         navController.navigate("categoriesScreen")
