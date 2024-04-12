@@ -10,5 +10,5 @@ data class Post(
 data class PostsState(
     val list: List<Post> = emptyList(),
     val loading: Boolean = false,
-    val error: String? = null
+    val err: String? = null
 )
