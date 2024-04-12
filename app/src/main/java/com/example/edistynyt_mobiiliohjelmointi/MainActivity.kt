@@ -97,7 +97,7 @@ class MainActivity : ComponentActivity() {
                     ){
                         NavHost(
                             navController = navController,
-                            startDestination = "loginScreen"
+                            startDestination = "categoriesScreen"
                             ){
 
                             composable(route = "categoriesScreen") {

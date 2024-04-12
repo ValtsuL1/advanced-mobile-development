@@ -64,6 +64,7 @@ fun LoginScreen(goToCategories: () -> Unit) {
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
+                    enabled = loginVm.loginState.value.username != "" && loginVm.loginState.value.password != "",
                     onClick = {
                         loginVm.login()
                         goToCategories()
