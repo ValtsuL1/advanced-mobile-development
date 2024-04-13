@@ -117,7 +117,11 @@ fun ConfirmCategoryDelete(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategory: (Int) -> Unit) {
+fun CategoriesScreen(
+    onMenuClick: () -> Unit,
+    navigateToEditCategory: (Int) -> Unit,
+    navigateToCategoryItems: (Int) -> Unit) {
+
     val vm: CategoriesViewModel = viewModel()
     
     Scaffold(
@@ -142,9 +146,7 @@ fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategory: (Int) -> U
         ){
             when {
                 vm.categoriesState.value.loading -> CircularProgressIndicator(
-                    modifier = Modifier.align(
-                        Alignment.Center
-                    )
+                    modifier = Modifier.align(Alignment.Center)
                 )
 
                 vm.categoriesState.value.err != null -> Text(text = "Error: ${vm.categoriesState.value.err}")
@@ -181,6 +183,9 @@ fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategory: (Int) -> U
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis
                                     )
+                                    IconButton(onClick = { navigateToCategoryItems(it.id) }) {
+                                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Items")
+                                    }
                                     IconButton(onClick = { vm.verifyCategoryRemoval(it.id) }) {
                                         Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
                                     }

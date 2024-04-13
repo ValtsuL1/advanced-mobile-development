@@ -35,6 +35,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 import com.example.edistynyt_mobiiliohjelmointi.ui.theme.Edistynyt_mobiiliohjelmointiTheme
 import kotlinx.coroutines.launch
 
@@ -102,7 +103,9 @@ class MainActivity : ComponentActivity() {
                                         drawerState.open()
                                     }
                                 }, navigateToEditCategory = {
-                                    navController.navigate("editCategoryScreen/${it}")
+                                    navController.navigate("editCategoryScreen/$it")
+                                }, navigateToCategoryItems = {
+                                    navController.navigate("rentalItemsScreen/${it}")
                                 })
                             }
 
@@ -114,11 +117,7 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate("categoriesScreen")
                                 })
 
-                                EditCategoryScreen(backToCategories = {
-                                    navController.navigateUp()
-                                }, goToCategories = {
-                                    navController.navigate("categoriesScreen")
-                                })
+
                             }
 
                             composable("loginScreen") {
@@ -131,6 +130,12 @@ class MainActivity : ComponentActivity() {
 
                             composable("postsScreen") {
                                 PostsScreen()
+                            }
+
+                            composable("rentalItemsScreen/{categoryId}") {
+                                RentalItemsScreen(backToCategories = {
+                                    navController.navigate("categoriesScreen")
+                                })
                             }
                         }
                     }

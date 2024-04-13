@@ -32,9 +32,11 @@ data class CategoryItem(
     @SerializedName("category_id")
     val id: Int = 0,
     @SerializedName("category_name")
-    val name: String = "")
+    val name: String = ""
+)
 
 data class CategoriesResponse(val categories: List<CategoryItem> = emptyList())
+
 data class CategoryResponse(val category: CategoryItem = CategoryItem())
 
 data class EditCategoryReq(
