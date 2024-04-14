@@ -4,6 +4,8 @@ import android.util.Log
 import com.example.edistynyt_mobiiliohjelmointi.model.CategoryResponse
 import com.example.edistynyt_mobiiliohjelmointi.model.RentalItemsResponse
 import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 private val retrofit = createClient()
@@ -15,5 +17,9 @@ interface RentalItemsApi {
     // Items by category
     @GET("category/{category_id}/items")
     suspend fun getItemsByCategory(@Path("category_id") id: Int): RentalItemsResponse
+
+    // Rent item
+    @POST("rentalitem/{rental_item_id}/rent")
+    suspend fun rentItem(@Path("rental_item_id") id: Int)
 
 }
