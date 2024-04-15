@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 class RentalItemsViewModel(savedStateHandle: SavedStateHandle): ViewModel() {
 
     private val _categoryId = savedStateHandle.get<String>("categoryId")?.toIntOrNull() ?: 0
+    private val _rentalItemId = savedStateHandle.get<String>("rentalItemId")?.toIntOrNull() ?: 0
 
     private val _rentalItemsState = mutableStateOf(RentalItemsState())
     val rentalItemsState: State<RentalItemsState> = _rentalItemsState
@@ -34,5 +35,9 @@ class RentalItemsViewModel(savedStateHandle: SavedStateHandle): ViewModel() {
                 _rentalItemsState.value = _rentalItemsState.value.copy(loading = false)
             }
         }
+    }
+
+    fun rentItem() {
+
     }
 }

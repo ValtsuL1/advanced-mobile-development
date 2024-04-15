@@ -24,3 +24,10 @@ data class RentalItem(
 )
 
 data class RentalItemsResponse(val items: List<RentalItem> = emptyList())
+
+data class RentalItemResponse(val item: RentalItem = RentalItem())
+
+data class RentItemReq(
+    @SerializedName("auth_user_auth_user_id")
+    val id: Int
+)

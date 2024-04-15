@@ -2,7 +2,10 @@ package com.example.edistynyt_mobiiliohjelmointi.api
 
 import android.util.Log
 import com.example.edistynyt_mobiiliohjelmointi.model.CategoryResponse
+import com.example.edistynyt_mobiiliohjelmointi.model.RentItemReq
+import com.example.edistynyt_mobiiliohjelmointi.model.RentalItemResponse
 import com.example.edistynyt_mobiiliohjelmointi.model.RentalItemsResponse
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -20,6 +23,9 @@ interface RentalItemsApi {
 
     // Rent item
     @POST("rentalitem/{rental_item_id}/rent")
-    suspend fun rentItem(@Path("rental_item_id") id: Int)
+    suspend fun rentItem(
+        @Path("rental_item_id") id: Int,
+        @Body rentItemReq: RentItemReq
+    ): RentalItemResponse
 
 }

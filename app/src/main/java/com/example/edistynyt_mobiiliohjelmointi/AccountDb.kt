@@ -20,11 +20,14 @@ abstract class AccountDao {
     @Insert
     abstract suspend fun addToken(entity: AccountEntity)
 
-    @Query("SELECT accessToken FROM account LIMIT 1;")
+    @Query("SELECT accessToken FROM account ORDER BY id DESC LIMIT 1;")
     abstract suspend fun getToken(): String?
+
+    @Query("DELETE FROM account")
+    abstract suspend fun removeTokens()
 }
 
 @Database(entities = [AccountEntity::class], version = 1)
-abstract class  AccountDatabase: RoomDatabase() {
+abstract class AccountDatabase: RoomDatabase() {
     abstract fun accountDao(): AccountDao
 }

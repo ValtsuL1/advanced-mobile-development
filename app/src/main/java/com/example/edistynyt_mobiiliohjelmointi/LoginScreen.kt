@@ -1,5 +1,6 @@
 package com.example.edistynyt_mobiiliohjelmointi
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,13 +15,16 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -29,12 +33,33 @@ import com.example.edistynyt_mobiiliohjelmointi.viewmodel.LoginViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(goToCategories: () -> Unit) {
+    val vm: LoginViewModel = viewModel()
+    val context = LocalContext.current
 
-    val loginVm: LoginViewModel = viewModel()
+    
+    
+    LaunchedEffect(key1 = vm.loginState.value.err) {
+        vm.loginState.value.err?.let {
+            Toast.makeText(context, vm.loginState.value.err, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    LaunchedEffect(key1 = vm.loginState.value.loginOk) {
+        if(vm.loginState.value.loginOk) {
+            vm.setLogin(false)
+            goToCategories()
+        }
+    }
+
+    LaunchedEffect(key1 = vm.logoutState.value.err) {
+        vm.logoutState.value.err?.let {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+        }
+    }
 
     Box() {
         when {
-            loginVm.loginState.value.loading -> CircularProgressIndicator(
+            vm.loginState.value.loading -> CircularProgressIndicator(
                 modifier = Modifier.align(
                     Alignment.Center
                 )
@@ -44,18 +69,18 @@ fun LoginScreen(goToCategories: () -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 OutlinedTextField(
-                    value = loginVm.loginState.value.username,
-                    onValueChange = { newUsername ->
-                        loginVm.setUsername(newUsername)
+                    value = vm.loginState.value.username,
+                    onValueChange = { username ->
+                        vm.setUsername(username)
                     },
                     placeholder = {
                         Text(text = "Username")
                     })
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
-                    value = loginVm.loginState.value.password,
-                    onValueChange = { newPassword ->
-                        loginVm.setPassword(newPassword)
+                    value = vm.loginState.value.password,
+                    onValueChange = { password ->
+                        vm.setPassword(password)
                     },
                     placeholder = {
                         Text(text = "Password")
@@ -64,10 +89,12 @@ fun LoginScreen(goToCategories: () -> Unit) {
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
-                    enabled = loginVm.loginState.value.username != "" && loginVm.loginState.value.password != "",
+                    enabled = vm.loginState.value.username != "" && vm.loginState.value.password != "",
                     onClick = {
-                        loginVm.login()
-                        goToCategories()
+                        vm.login()
+                        if(vm.loginState.value.loginOk) {
+                            goToCategories()
+                        }
                     }) {
                     Text(text = "Login")
                 }

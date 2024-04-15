@@ -31,12 +31,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.example.edistynyt_mobiiliohjelmointi.ui.theme.Edistynyt_mobiiliohjelmointiTheme
+import com.example.edistynyt_mobiiliohjelmointi.viewmodel.LoginViewModel
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -52,10 +55,13 @@ class MainActivity : ComponentActivity() {
                     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
                     val scope = rememberCoroutineScope()
                     val navController = rememberNavController()
+
+
                     ModalNavigationDrawer(
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+                        gesturesEnabled = true,
                         drawerContent = {
-                            ModalDrawerSheet {
+                        ModalDrawerSheet {
                                 Spacer(modifier = Modifier.height(16.dp))
 
                                 NavigationDrawerItem(
@@ -64,7 +70,9 @@ class MainActivity : ComponentActivity() {
                                     onClick = {
 
                                         scope.launch {
-                                            navController.navigate("categoriesScreen")
+                                            if(LoginViewModel().loginState.value.loginOk) {
+                                                navController.navigate("categoriesScreen")
+                                            }
                                             drawerState.close()
                                         }
                                     },
@@ -75,11 +83,11 @@ class MainActivity : ComponentActivity() {
                                 )
 
                                 NavigationDrawerItem(
-                                    label = { Text(text = "Login") },
+                                    label = { Text(text = "Logout") },
                                     selected = true,
                                     onClick = {
-
                                         scope.launch {
+                                            LoginViewModel().logout()
                                             navController.navigate("loginScreen")
                                             drawerState.close()
                                         }
@@ -91,10 +99,11 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         }, drawerState = drawerState
-                    ){
+                    ) {
+
                         NavHost(
                             navController = navController,
-                            startDestination = "categoriesScreen"
+                            startDestination = "loginScreen"
                             ){
 
                             composable("categoriesScreen") {
@@ -144,3 +153,4 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
