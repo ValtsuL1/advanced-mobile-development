@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.edistynyt_mobiiliohjelmointi.AccountDatabase
 import com.example.edistynyt_mobiiliohjelmointi.AccountEntity
 import com.example.edistynyt_mobiiliohjelmointi.DbProvider
+import com.example.edistynyt_mobiiliohjelmointi.MainActivity
 import com.example.edistynyt_mobiiliohjelmointi.api.authService
 import com.example.edistynyt_mobiiliohjelmointi.model.AuthReq
 import com.example.edistynyt_mobiiliohjelmointi.model.LoginState
@@ -26,7 +27,7 @@ class LoginViewModel(private val db: AccountDatabase = DbProvider.db): ViewModel
     val logoutState: State<LogoutState> = _logoutState
 
     private val _userId = mutableStateOf(UserId())
-    val userId: MutableState<UserId> = _userId
+    var userId: MutableState<UserId> = _userId
 
     init {
         viewModelScope.launch {
@@ -48,13 +49,11 @@ class LoginViewModel(private val db: AccountDatabase = DbProvider.db): ViewModel
         }
     }
 
-    private fun setUserId() {
+    fun setUserId() {
         viewModelScope.launch {
             try {
                 val accessToken = db.accountDao().getToken()
-                val userId = authService.getUserId("Bearer $accessToken").id
-                _userId.value = _userId.value.copy(id = userId)
-                Log.d("userid", userId.toString())
+                MainActivity.userId = authService.getUserId("Bearer $accessToken").id
             } catch (e: Exception) {
                 Log.d("e", e.toString())
             }
@@ -90,9 +89,8 @@ class LoginViewModel(private val db: AccountDatabase = DbProvider.db): ViewModel
                 db.accountDao().addToken(
                     AccountEntity(accessToken = res.accessToken)
                 )
-                setUserId()
                 setLogin(true)
-                Log.d("userid", userId.value.id.toString())
+                setUserId()
             } catch (e: Exception) {
                 _loginState.value = _loginState.value.copy(err = e.toString())
             } finally {

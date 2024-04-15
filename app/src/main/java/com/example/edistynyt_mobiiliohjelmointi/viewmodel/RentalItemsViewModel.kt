@@ -6,7 +6,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.edistynyt_mobiiliohjelmointi.AccountDatabase
+import com.example.edistynyt_mobiiliohjelmointi.DbProvider
+import com.example.edistynyt_mobiiliohjelmointi.MainActivity
+import com.example.edistynyt_mobiiliohjelmointi.api.authService
 import com.example.edistynyt_mobiiliohjelmointi.api.rentalItemsService
+import com.example.edistynyt_mobiiliohjelmointi.model.RentItemReq
+import com.example.edistynyt_mobiiliohjelmointi.model.RentalItemState
 import com.example.edistynyt_mobiiliohjelmointi.model.RentalItemsState
 import kotlinx.coroutines.launch
 
@@ -18,9 +24,15 @@ class RentalItemsViewModel(savedStateHandle: SavedStateHandle): ViewModel() {
     private val _rentalItemsState = mutableStateOf(RentalItemsState())
     val rentalItemsState: State<RentalItemsState> = _rentalItemsState
 
+    private val _rentalItemState = mutableStateOf(RentalItemState())
+    val rentalItemState: State<RentalItemState> = _rentalItemState
+
     init {
+        Log.d("RENTER ID", MainActivity.userId.toString())
         getRentalItems()
     }
+
+
 
     private fun getRentalItems() {
         viewModelScope.launch {
@@ -37,7 +49,21 @@ class RentalItemsViewModel(savedStateHandle: SavedStateHandle): ViewModel() {
         }
     }
 
-    fun rentItem() {
-
+    fun rentItem(rentalItemId: Int) {
+        viewModelScope.launch {
+            try {
+                _rentalItemState.value = _rentalItemState.value.copy(loading = true)
+                rentalItemsService.rentItem(
+                    rentalItemId,
+                    RentItemReq(
+                        id = MainActivity.userId
+                    )
+                )
+            } catch (e: Exception) {
+                _rentalItemState.value = _rentalItemState.value.copy(err = e.toString())
+            } finally {
+                _rentalItemState.value = _rentalItemState.value.copy(loading = false)
+            }
+        }
     }
 }

@@ -35,8 +35,6 @@ import com.example.edistynyt_mobiiliohjelmointi.viewmodel.LoginViewModel
 fun LoginScreen(goToCategories: () -> Unit) {
     val vm: LoginViewModel = viewModel()
     val context = LocalContext.current
-
-    
     
     LaunchedEffect(key1 = vm.loginState.value.err) {
         vm.loginState.value.err?.let {

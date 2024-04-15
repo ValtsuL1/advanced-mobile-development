@@ -1,6 +1,7 @@
 package com.example.edistynyt_mobiiliohjelmointi
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CircularProgressIndicator
@@ -24,6 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -38,6 +41,13 @@ import com.example.edistynyt_mobiiliohjelmointi.viewmodel.RentalItemsViewModel
 @Composable
 fun RentalItemsScreen(backToCategories: () -> Unit) {
     val vm: RentalItemsViewModel = viewModel()
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = vm.rentalItemState.value.err) {
+        vm.rentalItemState.value.err?.let {
+            Toast.makeText(context, vm.rentalItemState.value.err, Toast.LENGTH_LONG).show()
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -80,6 +90,9 @@ fun RentalItemsScreen(backToCategories: () -> Unit) {
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis
                                     )
+                                    IconButton(onClick = { vm.rentItem(it.id) }) {
+                                        Icon(imageVector = Icons.Default.Add, contentDescription = "Rent Item")
+                                    }
                                 }
                             }
                         }
