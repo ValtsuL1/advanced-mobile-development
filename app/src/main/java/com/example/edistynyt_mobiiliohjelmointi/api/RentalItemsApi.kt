@@ -1,9 +1,11 @@
 package com.example.edistynyt_mobiiliohjelmointi.api
 
 import android.util.Log
+import com.example.edistynyt_mobiiliohjelmointi.model.AddItemReq
 import com.example.edistynyt_mobiiliohjelmointi.model.CategoryResponse
 import com.example.edistynyt_mobiiliohjelmointi.model.EditItemReq
 import com.example.edistynyt_mobiiliohjelmointi.model.RentItemReq
+import com.example.edistynyt_mobiiliohjelmointi.model.RentalItem
 import com.example.edistynyt_mobiiliohjelmointi.model.RentalItemResponse
 import com.example.edistynyt_mobiiliohjelmointi.model.RentalItemsResponse
 import retrofit2.http.Body
@@ -44,4 +46,11 @@ interface RentalItemsApi {
     // Delete item
     @DELETE("rentalitem/{rental_item_id}")
     suspend fun deleteItem(@Path("rental_item_id") id: Int)
+
+    // Add item
+    @POST("category/{category_id}/items")
+    suspend fun addItem(
+        @Path("category_id") id: Int,
+        @Body req: AddItemReq
+    ): RentalItem
 }

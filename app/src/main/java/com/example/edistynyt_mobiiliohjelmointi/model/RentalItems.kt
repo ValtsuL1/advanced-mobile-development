@@ -21,12 +21,27 @@ data class DeleteRentalItemState(
     val err: String? = null
 )
 
+data class AddRentalItemState(
+    val name: String = "",
+    val id: Int = 0,
+    val err: String? = null,
+    val ok: Boolean = false,
+    val loading: Boolean = false
+)
+
+data class RentItemState(
+    val id: Int = 0,
+    val err: String? = null
+)
+
 data class RentalItem(
     @SerializedName("rental_item_id")
     val id: Int = 0,
     @SerializedName("rental_item_name")
     val name: String = ""
 )
+
+
 
 data class RentalItemsResponse(val items: List<RentalItem> = emptyList())
 
@@ -40,4 +55,11 @@ data class RentItemReq(
 data class EditItemReq(
     @SerializedName("rental_item_name")
     val name: String
+)
+
+data class AddItemReq(
+    @SerializedName("rental_item_name")
+    val name: String,
+    @SerializedName("created_by_user_id")
+    val id: Int
 )

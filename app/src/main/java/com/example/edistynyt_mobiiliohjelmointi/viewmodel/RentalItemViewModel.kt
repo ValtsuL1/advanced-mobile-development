@@ -63,7 +63,7 @@ class RentalItemViewModel(savedStateHandle: SavedStateHandle): ViewModel() {
         _rentalItemState.value = _rentalItemState.value.copy(item = item)
     }
 
-    fun setOk(status: Boolean) {
+    private fun setOk(status: Boolean) {
         _rentalItemState.value = _rentalItemState.value.copy(ok = status)
     }
 }

@@ -20,9 +20,12 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -38,7 +41,30 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.edistynyt_mobiiliohjelmointi.viewmodel.RentalItemsViewModel
 
 @Composable
-fun ConfirmItemDelete(
+fun AddRentalItemDialog(
+   addRentalItem: () -> Unit,
+   name: String,
+   setName: (String) -> Unit,
+   closeDialog: () -> Unit
+) {
+    AlertDialog(onDismissRequest = { closeDialog() }, confirmButton = {
+        TextButton(onClick = { addRentalItem() }) {
+            Text(text = "Save Item")
+        }
+    }, title = {
+        Text(text = "Add item")    
+    }, text = {
+        OutlinedTextField(
+            value = name,
+            onValueChange = {newName ->
+                setName(newName)
+            },
+            placeholder = { Text(text = "Item name")})
+    })
+}
+
+@Composable
+fun ConfirmRentalItemDelete(
     onConfirm: () -> Unit,
     onCancel: () -> Unit,
     clearErr: () -> Unit,
@@ -68,6 +94,11 @@ fun ConfirmItemDelete(
     })
 }
 
+@Composable
+fun ConfirmItemRental(
+
+) {}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RentalItemsScreen(
@@ -75,15 +106,14 @@ fun RentalItemsScreen(
     navigateToEditItem: (Int) -> Unit
 ) {
     val vm: RentalItemsViewModel = viewModel()
-    val context = LocalContext.current
-
-    LaunchedEffect(key1 = vm.rentalItemState.value.err) {
-        vm.rentalItemState.value.err?.let {
-            Toast.makeText(context, vm.rentalItemState.value.err, Toast.LENGTH_LONG).show()
-        }
-    }
 
     Scaffold(
+        floatingActionButtonPosition = FabPosition.Center,
+        floatingActionButton = {
+            FloatingActionButton(onClick = { vm.toggleAddRentalItem() }) {
+                Icon(imageVector = Icons.Filled.Add, contentDescription = "Add item")
+            }
+        },
         topBar = {
             TopAppBar(
                 title = { Text(text = "Items") },
@@ -106,11 +136,18 @@ fun RentalItemsScreen(
 
                 vm.rentalItemsState.value.err != null -> Text(text = "Error: ${vm.rentalItemsState.value.err}")
 
-                vm.deleteRentalItemState.value.id > 0 -> ConfirmItemDelete(
-                    onConfirm = { vm.deleteItem(vm.deleteRentalItemState.value.id) },
-                    onCancel = { vm.verifyItemDeletion(0) },
+                vm.deleteRentalItemState.value.id > 0 -> ConfirmRentalItemDelete(
+                    onConfirm = { vm.deleteRentalItem(vm.deleteRentalItemState.value.id) },
+                    onCancel = { vm.verifyRentalItemDeletion(0) },
                     clearErr = { vm.clearErr() },
                     errStr = vm.deleteRentalItemState.value.err
+                )
+                
+                vm.rentalItemsState.value.isAddingRentalItem -> AddRentalItemDialog(
+                    addRentalItem = { vm.addRentalItem() },
+                    name = vm.addRentalItemState.value.name,
+                    setName = {newName -> vm.setName(newName)},
+                    closeDialog = {vm.toggleAddRentalItem()}
                 )
                 
                 else -> LazyColumn(){
@@ -137,7 +174,7 @@ fun RentalItemsScreen(
                                     IconButton(onClick = { navigateToEditItem(it.id) }) {
                                         Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit Item")
                                     }
-                                    IconButton(onClick = { vm.verifyItemDeletion(it.id) }) {
+                                    IconButton(onClick = { vm.verifyRentalItemDeletion(it.id) }) {
                                         Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
                                     }
                                 }
