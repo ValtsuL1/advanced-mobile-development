@@ -179,11 +179,11 @@ fun CategoriesScreen(
                                     IconButton(onClick = { navigateToCategoryItems(it.id) }) {
                                         Icon(imageVector = Icons.Default.Menu, contentDescription = "Items")
                                     }
-                                    IconButton(onClick = { vm.verifyCategoryRemoval(it.id) }) {
-                                        Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
-                                    }
                                     IconButton(onClick = { navigateToEditCategory(it.id) }) {
                                         Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
+                                    }
+                                    IconButton(onClick = { vm.verifyCategoryRemoval(it.id) }) {
+                                        Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
                                     }
                                 }
                             }

@@ -15,7 +15,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -23,6 +25,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,6 +36,37 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.edistynyt_mobiiliohjelmointi.viewmodel.RentalItemsViewModel
+
+@Composable
+fun ConfirmItemDelete(
+    onConfirm: () -> Unit,
+    onCancel: () -> Unit,
+    clearErr: () -> Unit,
+    errStr: String?
+) {
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = errStr) {
+        errStr?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            clearErr()
+        }
+    }
+
+    AlertDialog(onDismissRequest = { /*TODO*/ }, confirmButton =  {
+        TextButton(onClick = { onConfirm() }) {
+            Text(text = "Delete")
+        }
+    }, dismissButton = {
+        TextButton(onClick = { onCancel() }) {
+            Text(text = "Cancel")
+        }
+    }, title = {
+        Text(text = "Are you sure?")
+    }, text = {
+        Text(text = "Are you sure you want to delete this item?")
+    })
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,6 +106,13 @@ fun RentalItemsScreen(
 
                 vm.rentalItemsState.value.err != null -> Text(text = "Error: ${vm.rentalItemsState.value.err}")
 
+                vm.deleteRentalItemState.value.id > 0 -> ConfirmItemDelete(
+                    onConfirm = { vm.deleteItem(vm.deleteRentalItemState.value.id) },
+                    onCancel = { vm.verifyItemDeletion(0) },
+                    clearErr = { vm.clearErr() },
+                    errStr = vm.deleteRentalItemState.value.err
+                )
+                
                 else -> LazyColumn(){
                     items(vm.rentalItemsState.value.list) {
                         Column(modifier = Modifier.fillMaxWidth()) {
@@ -95,6 +136,9 @@ fun RentalItemsScreen(
                                     }
                                     IconButton(onClick = { navigateToEditItem(it.id) }) {
                                         Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit Item")
+                                    }
+                                    IconButton(onClick = { vm.verifyItemDeletion(it.id) }) {
+                                        Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
                                     }
                                 }
                             }

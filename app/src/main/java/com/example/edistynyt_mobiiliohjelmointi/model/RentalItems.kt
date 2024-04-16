@@ -16,6 +16,11 @@ data class RentalItemState(
     val loading: Boolean = false
 )
 
+data class DeleteRentalItemState(
+    val id: Int = 0,
+    val err: String? = null
+)
+
 data class RentalItem(
     @SerializedName("rental_item_id")
     val id: Int = 0,

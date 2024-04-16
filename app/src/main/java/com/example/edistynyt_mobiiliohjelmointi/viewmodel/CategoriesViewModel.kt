@@ -78,8 +78,6 @@ class CategoriesViewModel: ViewModel() {
                 _deleteCategoryState.value = _deleteCategoryState.value.copy(id = 0)
             } catch (e: Exception) {
                 _deleteCategoryState.value = _deleteCategoryState.value.copy(err = e.toString())
-            } finally {
-
             }
         }
     }

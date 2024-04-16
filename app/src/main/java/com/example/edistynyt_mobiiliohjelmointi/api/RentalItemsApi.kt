@@ -7,6 +7,7 @@ import com.example.edistynyt_mobiiliohjelmointi.model.RentItemReq
 import com.example.edistynyt_mobiiliohjelmointi.model.RentalItemResponse
 import com.example.edistynyt_mobiiliohjelmointi.model.RentalItemsResponse
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -39,4 +40,8 @@ interface RentalItemsApi {
     // Get item
     @GET("rentalitem/{rental_item_id}")
     suspend fun getItem(@Path("rental_item_id") id: Int): RentalItemResponse
+
+    // Delete item
+    @DELETE("rentalitem/{rental_item_id}")
+    suspend fun deleteItem(@Path("rental_item_id") id: Int)
 }

@@ -11,6 +11,7 @@ import com.example.edistynyt_mobiiliohjelmointi.DbProvider
 import com.example.edistynyt_mobiiliohjelmointi.MainActivity
 import com.example.edistynyt_mobiiliohjelmointi.api.authService
 import com.example.edistynyt_mobiiliohjelmointi.api.rentalItemsService
+import com.example.edistynyt_mobiiliohjelmointi.model.DeleteRentalItemState
 import com.example.edistynyt_mobiiliohjelmointi.model.RentItemReq
 import com.example.edistynyt_mobiiliohjelmointi.model.RentalItemState
 import com.example.edistynyt_mobiiliohjelmointi.model.RentalItemsState
@@ -26,6 +27,9 @@ class RentalItemsViewModel(savedStateHandle: SavedStateHandle): ViewModel() {
 
     private val _rentalItemState = mutableStateOf(RentalItemState())
     val rentalItemState: State<RentalItemState> = _rentalItemState
+
+    private val _deleteRentalItemState = mutableStateOf(DeleteRentalItemState())
+    val deleteRentalItemState: State<DeleteRentalItemState> = _deleteRentalItemState
 
     init {
         MainActivity.categoryId = _categoryId
@@ -63,6 +67,29 @@ class RentalItemsViewModel(savedStateHandle: SavedStateHandle): ViewModel() {
                 _rentalItemState.value = _rentalItemState.value.copy(err = e.toString())
             } finally {
                 _rentalItemState.value = _rentalItemState.value.copy(loading = false)
+            }
+        }
+    }
+
+    fun clearErr() {
+        _deleteRentalItemState.value = _deleteRentalItemState.value.copy(err = null)
+    }
+
+    fun verifyItemDeletion(rentalItemId: Int) {
+        _deleteRentalItemState.value = _deleteRentalItemState.value.copy(id = rentalItemId)
+    }
+
+    fun deleteItem(rentalItemId: Int) {
+        viewModelScope.launch {
+            try {
+                rentalItemsService.deleteItem(rentalItemId)
+                val listOfItems = _rentalItemsState.value.list.filter {
+                    rentalItemId != it.id
+                }
+                _rentalItemsState.value = _rentalItemsState.value.copy(list = listOfItems)
+                _deleteRentalItemState.value = _deleteRentalItemState.value.copy(id = 0)
+            } catch (e:Exception) {
+                _deleteRentalItemState.value = _deleteRentalItemState.value.copy(err = e.toString())
             }
         }
     }
