@@ -1,6 +1,5 @@
-package com.example.edistynyt_mobiiliohjelmointi
+package com.example.edistynyt_mobiiliohjelmointi.view
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,7 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -33,13 +32,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.example.edistynyt_mobiiliohjelmointi.viewmodel.RentalItemsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RentalItemsScreen(backToCategories: () -> Unit) {
+fun RentalItemsScreen(
+    backToCategories: () -> Unit,
+    navigateToEditItem: (Int) -> Unit
+) {
     val vm: RentalItemsViewModel = viewModel()
     val context = LocalContext.current
 
@@ -92,6 +92,9 @@ fun RentalItemsScreen(backToCategories: () -> Unit) {
                                     )
                                     IconButton(onClick = { vm.rentItem(it.id) }) {
                                         Icon(imageVector = Icons.Default.Add, contentDescription = "Rent Item")
+                                    }
+                                    IconButton(onClick = { navigateToEditItem(it.id) }) {
+                                        Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit Item")
                                     }
                                 }
                             }

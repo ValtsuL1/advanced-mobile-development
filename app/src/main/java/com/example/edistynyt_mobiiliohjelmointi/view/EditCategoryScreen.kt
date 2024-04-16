@@ -1,4 +1,4 @@
-package com.example.edistynyt_mobiiliohjelmointi
+package com.example.edistynyt_mobiiliohjelmointi.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,6 +30,14 @@ import com.example.edistynyt_mobiiliohjelmointi.viewmodel.CategoryViewModel
 @Composable
 fun EditCategoryScreen(backToCategories: () -> Unit, goToCategories: () -> Unit) {
     val vm: CategoryViewModel = viewModel()
+
+    LaunchedEffect(key1 = vm.categoryState.value.ok) {
+        if(vm.categoryState.value.ok) {
+            vm.setOk(false)
+            backToCategories()
+        }
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(title = { Text(text = vm.categoryState.value.item.name) }, navigationIcon = {
@@ -38,7 +46,7 @@ fun EditCategoryScreen(backToCategories: () -> Unit, goToCategories: () -> Unit)
                 }
             })
         }
-    ) {
+    ) { it ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -63,55 +71,7 @@ fun EditCategoryScreen(backToCategories: () -> Unit, goToCategories: () -> Unit)
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Button(onClick = { vm.editCategory(goToCategories) }) {
-                            Text(text = "Edit")
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    LaunchedEffect(key1 = vm.categoryState.value.ok) {
-        if(vm.categoryState.value.ok) {
-            vm.setOk(false)
-            goToCategories()
-        }
-    }
-    
-    Scaffold(
-        topBar = {
-            TopAppBar(title = { Text(text = vm.categoryState.value.item.name) }, navigationIcon = {
-                IconButton(onClick = { backToCategories() }) {
-                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back To Categories")
-                }
-            })
-        }
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it)
-        ) {
-            when {
-                vm.categoryState.value.loading -> CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
-                )
-                
-                vm.categoryState.value.err != null -> Text(text = "Error ${vm.categoryState.value.err}")
-                
-                else -> {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        OutlinedTextField(
-                            value = vm.categoryState.value.item.name,
-                            onValueChange = {vm.setName(it)}
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Button(onClick = { vm.editCategory() }) {
-                            Text(text = "Edit")
+                            Text(text = "Edit Name")
                         }
                     }
                 }

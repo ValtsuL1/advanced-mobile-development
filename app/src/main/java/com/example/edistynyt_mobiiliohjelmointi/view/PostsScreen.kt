@@ -1,4 +1,4 @@
-package com.example.edistynyt_mobiiliohjelmointi
+package com.example.edistynyt_mobiiliohjelmointi.view
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items

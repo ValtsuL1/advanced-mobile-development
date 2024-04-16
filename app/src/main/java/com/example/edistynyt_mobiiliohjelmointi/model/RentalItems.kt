@@ -31,3 +31,8 @@ data class RentItemReq(
     @SerializedName("auth_user_auth_user_id")
     val id: Int
 )
+
+data class EditItemReq(
+    @SerializedName("rental_item_name")
+    val name: String
+)

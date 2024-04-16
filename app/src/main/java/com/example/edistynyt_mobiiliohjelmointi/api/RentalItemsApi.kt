@@ -2,6 +2,7 @@ package com.example.edistynyt_mobiiliohjelmointi.api
 
 import android.util.Log
 import com.example.edistynyt_mobiiliohjelmointi.model.CategoryResponse
+import com.example.edistynyt_mobiiliohjelmointi.model.EditItemReq
 import com.example.edistynyt_mobiiliohjelmointi.model.RentItemReq
 import com.example.edistynyt_mobiiliohjelmointi.model.RentalItemResponse
 import com.example.edistynyt_mobiiliohjelmointi.model.RentalItemsResponse
@@ -28,4 +29,14 @@ interface RentalItemsApi {
         @Body rentItemReq: RentItemReq
     ): RentalItemResponse
 
+    // Edit item
+    @PUT("rentalitem/{rental_item_id}")
+    suspend fun editItem(
+        @Path("rental_item_id") id: Int,
+        @Body editItemReq: EditItemReq
+    ): RentalItemResponse
+
+    // Get item
+    @GET("rentalitem/{rental_item_id}")
+    suspend fun getItem(@Path("rental_item_id") id: Int): RentalItemResponse
 }

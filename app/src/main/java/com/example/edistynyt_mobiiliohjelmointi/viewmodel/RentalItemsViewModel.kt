@@ -15,11 +15,11 @@ import com.example.edistynyt_mobiiliohjelmointi.model.RentItemReq
 import com.example.edistynyt_mobiiliohjelmointi.model.RentalItemState
 import com.example.edistynyt_mobiiliohjelmointi.model.RentalItemsState
 import kotlinx.coroutines.launch
+import kotlin.math.log
 
 class RentalItemsViewModel(savedStateHandle: SavedStateHandle): ViewModel() {
 
     private val _categoryId = savedStateHandle.get<String>("categoryId")?.toIntOrNull() ?: 0
-    private val _rentalItemId = savedStateHandle.get<String>("rentalItemId")?.toIntOrNull() ?: 0
 
     private val _rentalItemsState = mutableStateOf(RentalItemsState())
     val rentalItemsState: State<RentalItemsState> = _rentalItemsState
@@ -28,11 +28,10 @@ class RentalItemsViewModel(savedStateHandle: SavedStateHandle): ViewModel() {
     val rentalItemState: State<RentalItemState> = _rentalItemState
 
     init {
+        MainActivity.categoryId = _categoryId
         Log.d("RENTER ID", MainActivity.userId.toString())
         getRentalItems()
     }
-
-
 
     private fun getRentalItems() {
         viewModelScope.launch {
@@ -42,6 +41,7 @@ class RentalItemsViewModel(savedStateHandle: SavedStateHandle): ViewModel() {
                 _rentalItemsState.value = rentalItemsState.value.copy(list = res.items)
                 Log.d("rental items list", res.toString())
             } catch (e: Exception) {
+                Log.d("CATEGORY ID", _categoryId.toString())
                 _rentalItemsState.value = _rentalItemsState.value.copy(err = e.toString())
             } finally {
                 _rentalItemsState.value = _rentalItemsState.value.copy(loading = false)
