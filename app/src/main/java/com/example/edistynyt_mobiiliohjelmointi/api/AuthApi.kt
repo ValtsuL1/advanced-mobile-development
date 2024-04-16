@@ -11,13 +11,9 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 
-private val retrofitClient = Retrofit.Builder()
-    .baseUrl("http://10.0.2.2:8000/api/v1/")
-    .addConverterFactory(GsonConverterFactory
-        .create())
-    .build()
+private val retrofit = createClient()
 
-val authService = retrofitClient.create(AuthApi::class.java)
+val authService = retrofit.create(AuthApi::class.java)
 
 interface AuthApi {
     @POST("auth/login")
@@ -31,4 +27,7 @@ interface AuthApi {
 
     @GET("auth/account")
     suspend fun getUserId(@Header("Authorization") bearerToken: String): UserId
+
+    @POST("auth/register")
+    suspend fun register(@Body req: AuthReq): AuthRes
 }

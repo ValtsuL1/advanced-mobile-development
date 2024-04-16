@@ -1,6 +1,5 @@
 package com.example.edistynyt_mobiiliohjelmointi.view
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,10 +12,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -24,30 +21,10 @@ import com.example.edistynyt_mobiiliohjelmointi.viewmodel.LoginViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(goToCategories: () -> Unit, gotToRegister: () -> Unit) {
+fun RegisterScreen(goToLogin: () -> Unit) {
     val vm: LoginViewModel = viewModel()
-    val context = LocalContext.current
-    
-    LaunchedEffect(key1 = vm.loginState.value.err) {
-        vm.loginState.value.err?.let {
-            Toast.makeText(context, vm.loginState.value.err, Toast.LENGTH_LONG).show()
-        }
-    }
 
-    LaunchedEffect(key1 = vm.loginState.value.loginOk) {
-        if(vm.loginState.value.loginOk) {
-            vm.setLogin(false)
-            goToCategories()
-        }
-    }
-
-    LaunchedEffect(key1 = vm.logoutState.value.err) {
-        vm.logoutState.value.err?.let {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-        }
-    }
-
-    Box() {
+    Box(){
         when {
             vm.loginState.value.loading -> CircularProgressIndicator(
                 modifier = Modifier.align(
@@ -81,17 +58,11 @@ fun LoginScreen(goToCategories: () -> Unit, gotToRegister: () -> Unit) {
                 Button(
                     enabled = vm.loginState.value.username != "" && vm.loginState.value.password != "",
                     onClick = {
-                        vm.login()
-                        if(vm.loginState.value.loginOk) {
-                            goToCategories()
-                        }
+                        vm.register(goToLogin)
                     }
                 ) {
-                    Text(text = "Login") 
-                }
-                Button(onClick = { gotToRegister() }) {
                     Text(text = "Register")
-                } 
+                }
             }
         }
     }

@@ -32,6 +32,7 @@ import com.example.edistynyt_mobiiliohjelmointi.view.EditCategoryScreen
 import com.example.edistynyt_mobiiliohjelmointi.view.EditRentalItemScreen
 import com.example.edistynyt_mobiiliohjelmointi.view.LoginScreen
 import com.example.edistynyt_mobiiliohjelmointi.view.PostsScreen
+import com.example.edistynyt_mobiiliohjelmointi.view.RegisterScreen
 import com.example.edistynyt_mobiiliohjelmointi.view.RentalItemsScreen
 import com.example.edistynyt_mobiiliohjelmointi.viewmodel.LoginViewModel
 import kotlinx.coroutines.launch
@@ -127,9 +128,15 @@ class MainActivity : ComponentActivity() {
 
                             composable("loginScreen") {
                                 LoginScreen(goToCategories = {
-                                    scope.launch {
-                                        navController.navigate("categoriesScreen")
-                                    }
+                                    navController.navigate("categoriesScreen")
+                                }, gotToRegister = {
+                                    navController.navigate("registerScreen")
+                                })
+                            }
+
+                            composable("registerScreen") {
+                                RegisterScreen(goToLogin = {
+                                    navController.navigate("loginScreen")
                                 })
                             }
 

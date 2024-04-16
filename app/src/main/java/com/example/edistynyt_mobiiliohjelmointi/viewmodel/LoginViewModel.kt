@@ -14,6 +14,7 @@ import com.example.edistynyt_mobiiliohjelmointi.api.authService
 import com.example.edistynyt_mobiiliohjelmointi.model.AuthReq
 import com.example.edistynyt_mobiiliohjelmointi.model.LoginState
 import com.example.edistynyt_mobiiliohjelmointi.model.LogoutState
+import com.example.edistynyt_mobiiliohjelmointi.model.RegistrationState
 import com.example.edistynyt_mobiiliohjelmointi.model.UserId
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.launch
@@ -26,8 +27,8 @@ class LoginViewModel(private val db: AccountDatabase = DbProvider.db): ViewModel
     private val _logoutState = mutableStateOf(LogoutState())
     val logoutState: State<LogoutState> = _logoutState
 
-    private val _userId = mutableStateOf(UserId())
-    var userId: MutableState<UserId> = _userId
+    private val _registrationState = mutableStateOf(RegistrationState())
+    val registrationState: State<RegistrationState> = _registrationState
 
     init {
         viewModelScope.launch {
@@ -49,7 +50,7 @@ class LoginViewModel(private val db: AccountDatabase = DbProvider.db): ViewModel
         }
     }
 
-    fun setUserId() {
+    private fun setUserId() {
         viewModelScope.launch {
             try {
                 val accessToken = db.accountDao().getToken()
@@ -91,6 +92,25 @@ class LoginViewModel(private val db: AccountDatabase = DbProvider.db): ViewModel
                 )
                 setLogin(true)
                 setUserId()
+            } catch (e: Exception) {
+                _loginState.value = _loginState.value.copy(err = e.toString())
+            } finally {
+                _loginState.value = _loginState.value.copy(loading = false)
+            }
+        }
+    }
+
+    fun register(goToLogin: () -> Unit) {
+        viewModelScope.launch {
+            try {
+                _loginState.value = _loginState.value.copy(loading = true)
+                authService.register(
+                    AuthReq(
+                        username = loginState.value.username,
+                        password = loginState.value.password
+                    )
+                )
+                goToLogin()
             } catch (e: Exception) {
                 _loginState.value = _loginState.value.copy(err = e.toString())
             } finally {

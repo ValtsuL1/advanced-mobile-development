@@ -10,6 +10,14 @@ data class LoginState(
     val err: String? = null
 )
 
+data class RegistrationState(
+    val username: String = "",
+    val password: String = "",
+    val registerOk: Boolean = false,
+    val loading: Boolean = false,
+    val err: String? = null
+)
+
 data class AuthReq(
     val username: String = "",
     val password: String = ""
