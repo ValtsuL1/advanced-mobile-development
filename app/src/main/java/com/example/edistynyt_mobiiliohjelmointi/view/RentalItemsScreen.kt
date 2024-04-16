@@ -96,8 +96,34 @@ fun ConfirmRentalItemDelete(
 
 @Composable
 fun ConfirmItemRental(
+    onConfirm: () -> Unit,
+    onCancel: () -> Unit,
+    clearErr: () -> Unit,
+    errStr: String?
+) {
+    val context = LocalContext.current
 
-) {}
+    LaunchedEffect(key1 = errStr) {
+        errStr?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            clearErr()
+        }
+    }
+
+    AlertDialog(onDismissRequest = { /*TODO*/ }, confirmButton =  {
+        TextButton(onClick = { onConfirm() }) {
+            Text(text = "Rent")
+        }
+    }, dismissButton = {
+        TextButton(onClick = { onCancel() }) {
+            Text(text = "Cancel")
+        }
+    }, title = {
+        Text(text = "Are you sure?")
+    }, text = {
+        Text(text = "Are you sure you want to rent this item?")
+    })
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -139,7 +165,7 @@ fun RentalItemsScreen(
                 vm.deleteRentalItemState.value.id > 0 -> ConfirmRentalItemDelete(
                     onConfirm = { vm.deleteRentalItem(vm.deleteRentalItemState.value.id) },
                     onCancel = { vm.verifyRentalItemDeletion(0) },
-                    clearErr = { vm.clearErr() },
+                    clearErr = { vm.clearDeleteErr() },
                     errStr = vm.deleteRentalItemState.value.err
                 )
                 
@@ -148,6 +174,13 @@ fun RentalItemsScreen(
                     name = vm.addRentalItemState.value.name,
                     setName = {newName -> vm.setName(newName)},
                     closeDialog = {vm.toggleAddRentalItem()}
+                )
+                
+                vm.rentItemState.value.id > 0 -> ConfirmItemRental(
+                    onConfirm = { vm.rentItem(vm.rentItemState.value.id) },
+                    onCancel = { vm.verifyItemRental(0) },
+                    clearErr = { vm.clearRentErr() },
+                    errStr = vm.rentItemState.value.err
                 )
                 
                 else -> LazyColumn(){
@@ -168,7 +201,7 @@ fun RentalItemsScreen(
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis
                                     )
-                                    IconButton(onClick = { vm.rentItem(it.id) }) {
+                                    IconButton(onClick = { vm.verifyItemRental(it.id) }) {
                                         Icon(imageVector = Icons.Default.Add, contentDescription = "Rent Item")
                                     }
                                     IconButton(onClick = { navigateToEditItem(it.id) }) {

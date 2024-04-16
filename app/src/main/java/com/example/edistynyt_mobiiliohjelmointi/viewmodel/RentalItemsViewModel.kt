@@ -53,9 +53,7 @@ class RentalItemsViewModel(savedStateHandle: SavedStateHandle): ViewModel() {
                 _rentalItemsState.value = _rentalItemsState.value.copy(loading = true)
                 val res = rentalItemsService.getItemsByCategory(_categoryId)
                 _rentalItemsState.value = rentalItemsState.value.copy(list = res.items)
-                Log.d("rental items list", res.toString())
             } catch (e: Exception) {
-                Log.d("CATEGORY ID", _categoryId.toString())
                 _rentalItemsState.value = _rentalItemsState.value.copy(err = e.toString())
             } finally {
                 _rentalItemsState.value = _rentalItemsState.value.copy(loading = false)
@@ -64,7 +62,11 @@ class RentalItemsViewModel(savedStateHandle: SavedStateHandle): ViewModel() {
     }
 
     fun verifyItemRental(rentalItemId: Int) {
-        _re
+        _rentItemState.value = _rentItemState.value.copy(id = rentalItemId)
+    }
+
+    fun clearRentErr() {
+        _rentItemState.value = _rentItemState.value.copy(err = null)
     }
 
     fun rentItem(rentalItemId: Int) {
@@ -80,12 +82,13 @@ class RentalItemsViewModel(savedStateHandle: SavedStateHandle): ViewModel() {
             } catch (e: Exception) {
                 _rentalItemState.value = _rentalItemState.value.copy(err = e.toString())
             } finally {
+                _rentItemState.value = _rentItemState.value.copy(id = 0)
                 _rentalItemState.value = _rentalItemState.value.copy(loading = false)
             }
         }
     }
 
-    fun clearErr() {
+    fun clearDeleteErr() {
         _deleteRentalItemState.value = _deleteRentalItemState.value.copy(err = null)
     }
 
