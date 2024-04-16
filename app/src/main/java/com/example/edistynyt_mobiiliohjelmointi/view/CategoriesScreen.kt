@@ -35,11 +35,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.edistynyt_mobiiliohjelmointi.MainActivity
 import com.example.edistynyt_mobiiliohjelmointi.viewmodel.CategoriesViewModel
 
 @Composable
@@ -116,7 +118,8 @@ fun CategoriesScreen(
     navigateToCategoryItems: (Int) -> Unit) {
 
     val vm: CategoriesViewModel = viewModel()
-    
+    val isLoggedIn = MainActivity.isLoggedIn
+
     Scaffold(
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
@@ -179,10 +182,12 @@ fun CategoriesScreen(
                                     IconButton(onClick = { navigateToCategoryItems(it.id) }) {
                                         Icon(imageVector = Icons.Default.Menu, contentDescription = "Items")
                                     }
-                                    IconButton(onClick = { navigateToEditCategory(it.id) }) {
+                                    IconButton(enabled = isLoggedIn,
+                                        onClick = { navigateToEditCategory(it.id) }) {
                                         Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
                                     }
-                                    IconButton(onClick = { vm.verifyCategoryRemoval(it.id) }) {
+                                    IconButton(enabled = isLoggedIn,
+                                        onClick = { vm.verifyCategoryRemoval(it.id) }) {
                                         Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
                                     }
                                 }

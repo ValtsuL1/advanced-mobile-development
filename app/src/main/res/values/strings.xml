@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Edistynyt_mobiiliohjelmointi</string>
+    <string name="categories_screen_items">Items</string>
 </resources>

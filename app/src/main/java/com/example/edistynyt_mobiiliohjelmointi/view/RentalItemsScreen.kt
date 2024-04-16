@@ -38,6 +38,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.edistynyt_mobiiliohjelmointi.MainActivity
 import com.example.edistynyt_mobiiliohjelmointi.viewmodel.RentalItemsViewModel
 
 @Composable
@@ -132,6 +133,7 @@ fun RentalItemsScreen(
     navigateToEditItem: (Int) -> Unit
 ) {
     val vm: RentalItemsViewModel = viewModel()
+    val isLoggedIn = MainActivity.isLoggedIn
 
     Scaffold(
         floatingActionButtonPosition = FabPosition.Center,
@@ -204,10 +206,12 @@ fun RentalItemsScreen(
                                     IconButton(onClick = { vm.verifyItemRental(it.id) }) {
                                         Icon(imageVector = Icons.Default.Add, contentDescription = "Rent Item")
                                     }
-                                    IconButton(onClick = { navigateToEditItem(it.id) }) {
+                                    IconButton(enabled = isLoggedIn,
+                                        onClick = { navigateToEditItem(it.id) }) {
                                         Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit Item")
                                     }
-                                    IconButton(onClick = { vm.verifyRentalItemDeletion(it.id) }) {
+                                    IconButton(enabled = isLoggedIn,
+                                        onClick = { vm.verifyRentalItemDeletion(it.id) }) {
                                         Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
                                     }
                                 }

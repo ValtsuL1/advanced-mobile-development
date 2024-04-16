@@ -1,7 +1,6 @@
 package com.example.edistynyt_mobiiliohjelmointi.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -14,9 +13,6 @@ import com.example.edistynyt_mobiiliohjelmointi.api.authService
 import com.example.edistynyt_mobiiliohjelmointi.model.AuthReq
 import com.example.edistynyt_mobiiliohjelmointi.model.LoginState
 import com.example.edistynyt_mobiiliohjelmointi.model.LogoutState
-import com.example.edistynyt_mobiiliohjelmointi.model.RegistrationState
-import com.example.edistynyt_mobiiliohjelmointi.model.UserId
-import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.launch
 
 class LoginViewModel(private val db: AccountDatabase = DbProvider.db): ViewModel() {
@@ -26,9 +22,6 @@ class LoginViewModel(private val db: AccountDatabase = DbProvider.db): ViewModel
 
     private val _logoutState = mutableStateOf(LogoutState())
     val logoutState: State<LogoutState> = _logoutState
-
-    private val _registrationState = mutableStateOf(RegistrationState())
-    val registrationState: State<RegistrationState> = _registrationState
 
     init {
         viewModelScope.launch {
@@ -71,10 +64,12 @@ class LoginViewModel(private val db: AccountDatabase = DbProvider.db): ViewModel
 
     fun setLogin(ok: Boolean) {
         _loginState.value = _loginState.value.copy(loginOk = ok)
+        MainActivity.isLoggedIn = true
     }
 
     fun setLogout(ok: Boolean) {
         _logoutState.value = _logoutState.value.copy(logoutOk = ok)
+        MainActivity.isLoggedIn = false
     }
 
     fun login() {

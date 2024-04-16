@@ -41,6 +41,7 @@ class MainActivity : ComponentActivity() {
     companion object {
         var userId: Int = 0
         var categoryId: Int = 0
+        var isLoggedIn: Boolean = false
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -129,7 +130,7 @@ class MainActivity : ComponentActivity() {
                             composable("loginScreen") {
                                 LoginScreen(goToCategories = {
                                     navController.navigate("categoriesScreen")
-                                }, gotToRegister = {
+                                }, goToRegister = {
                                     navController.navigate("registerScreen")
                                 })
                             }

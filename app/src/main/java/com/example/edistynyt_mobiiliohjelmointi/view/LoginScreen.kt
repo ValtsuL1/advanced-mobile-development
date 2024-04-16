@@ -22,9 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.edistynyt_mobiiliohjelmointi.viewmodel.LoginViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(goToCategories: () -> Unit, gotToRegister: () -> Unit) {
+fun LoginScreen(goToCategories: () -> Unit, goToRegister: () -> Unit) {
     val vm: LoginViewModel = viewModel()
     val context = LocalContext.current
     
@@ -89,9 +88,12 @@ fun LoginScreen(goToCategories: () -> Unit, gotToRegister: () -> Unit) {
                 ) {
                     Text(text = "Login") 
                 }
-                Button(onClick = { gotToRegister() }) {
+                Button(onClick = { goToRegister() }) {
                     Text(text = "Register")
                 } 
+                Button(onClick = { goToCategories() }) {
+                    Text(text = "Continue As Guest")
+                }
             }
         }
     }
