@@ -43,24 +43,24 @@ import com.example.edistynyt_mobiiliohjelmointi.viewmodel.RentalItemsViewModel
 
 @Composable
 fun AddRentalItemDialog(
-   addRentalItem: () -> Unit,
-   name: String,
-   setName: (String) -> Unit,
-   closeDialog: () -> Unit
+    addRentalItem: () -> Unit,
+    name: String,
+    setName: (String) -> Unit,
+    closeDialog: () -> Unit
 ) {
     AlertDialog(onDismissRequest = { closeDialog() }, confirmButton = {
         TextButton(onClick = { addRentalItem() }) {
             Text(text = "Save Item")
         }
     }, title = {
-        Text(text = "Add item")    
+        Text(text = "Add item")
     }, text = {
         OutlinedTextField(
             value = name,
-            onValueChange = {newName ->
+            onValueChange = { newName ->
                 setName(newName)
             },
-            placeholder = { Text(text = "Item name")})
+            placeholder = { Text(text = "Item name") })
     })
 }
 
@@ -80,7 +80,7 @@ fun ConfirmRentalItemDelete(
         }
     }
 
-    AlertDialog(onDismissRequest = { /*TODO*/ }, confirmButton =  {
+    AlertDialog(onDismissRequest = { /*TODO*/ }, confirmButton = {
         TextButton(onClick = { onConfirm() }) {
             Text(text = "Delete")
         }
@@ -111,7 +111,7 @@ fun ConfirmItemRental(
         }
     }
 
-    AlertDialog(onDismissRequest = { /*TODO*/ }, confirmButton =  {
+    AlertDialog(onDismissRequest = { /*TODO*/ }, confirmButton = {
         TextButton(onClick = { onConfirm() }) {
             Text(text = "Rent")
         }
@@ -147,15 +147,19 @@ fun RentalItemsScreen(
                 title = { Text(text = "Items") },
                 navigationIcon = {
                     IconButton(onClick = { backToCategories() }) {
-                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back To Categories")
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Back To Categories"
+                        )
                     }
                 }
             )
         }
     ) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(it)
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
         ) {
             when {
                 vm.rentalItemsState.value.loading -> CircularProgressIndicator(
@@ -170,29 +174,29 @@ fun RentalItemsScreen(
                     clearErr = { vm.clearDeleteErr() },
                     errStr = vm.deleteRentalItemState.value.err
                 )
-                
+
                 vm.rentalItemsState.value.isAddingRentalItem -> AddRentalItemDialog(
                     addRentalItem = { vm.addRentalItem() },
                     name = vm.addRentalItemState.value.name,
-                    setName = {newName -> vm.setName(newName)},
-                    closeDialog = {vm.toggleAddRentalItem()}
+                    setName = { newName -> vm.setName(newName) },
+                    closeDialog = { vm.toggleAddRentalItem() }
                 )
-                
+
                 vm.rentItemState.value.id > 0 -> ConfirmItemRental(
                     onConfirm = { vm.rentItem(vm.rentItemState.value.id) },
                     onCancel = { vm.verifyItemRental(0) },
                     clearErr = { vm.clearRentErr() },
                     errStr = vm.rentItemState.value.err
                 )
-                
-                else -> LazyColumn(){
+
+                else -> LazyColumn() {
                     items(vm.rentalItemsState.value.list) {
                         Column(modifier = Modifier.fillMaxWidth()) {
                             Row(
                                 Modifier
                                     .fillMaxWidth()
                                     .padding(8.dp),
-                                    horizontalArrangement = Arrangement.SpaceBetween
+                                horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 RandomImage()
                                 Spacer(modifier = Modifier.width(16.dp))
@@ -204,15 +208,24 @@ fun RentalItemsScreen(
                                         overflow = TextOverflow.Ellipsis
                                     )
                                     IconButton(onClick = { vm.verifyItemRental(it.id) }) {
-                                        Icon(imageVector = Icons.Default.Add, contentDescription = "Rent Item")
+                                        Icon(
+                                            imageVector = Icons.Default.Add,
+                                            contentDescription = "Rent Item"
+                                        )
                                     }
                                     IconButton(enabled = isLoggedIn,
                                         onClick = { navigateToEditItem(it.id) }) {
-                                        Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit Item")
+                                        Icon(
+                                            imageVector = Icons.Default.Edit,
+                                            contentDescription = "Edit Item"
+                                        )
                                     }
                                     IconButton(enabled = isLoggedIn,
                                         onClick = { vm.verifyRentalItemDeletion(it.id) }) {
-                                        Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
+                                        Icon(
+                                            imageVector = Icons.Default.Delete,
+                                            contentDescription = "Delete"
+                                        )
                                     }
                                 }
                             }

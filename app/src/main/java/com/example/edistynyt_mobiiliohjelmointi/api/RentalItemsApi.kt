@@ -1,8 +1,6 @@
 package com.example.edistynyt_mobiiliohjelmointi.api
 
-import android.util.Log
 import com.example.edistynyt_mobiiliohjelmointi.model.AddItemReq
-import com.example.edistynyt_mobiiliohjelmointi.model.CategoryResponse
 import com.example.edistynyt_mobiiliohjelmointi.model.EditItemReq
 import com.example.edistynyt_mobiiliohjelmointi.model.RentItemReq
 import com.example.edistynyt_mobiiliohjelmointi.model.RentalItem

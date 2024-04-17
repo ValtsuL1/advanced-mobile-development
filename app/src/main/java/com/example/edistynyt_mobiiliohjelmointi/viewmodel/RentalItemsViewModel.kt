@@ -1,16 +1,11 @@
 package com.example.edistynyt_mobiiliohjelmointi.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.edistynyt_mobiiliohjelmointi.AccountDatabase
-import com.example.edistynyt_mobiiliohjelmointi.DbProvider
 import com.example.edistynyt_mobiiliohjelmointi.MainActivity
-import com.example.edistynyt_mobiiliohjelmointi.api.authService
 import com.example.edistynyt_mobiiliohjelmointi.api.rentalItemsService
 import com.example.edistynyt_mobiiliohjelmointi.model.AddItemReq
 import com.example.edistynyt_mobiiliohjelmointi.model.AddRentalItemState
@@ -20,9 +15,8 @@ import com.example.edistynyt_mobiiliohjelmointi.model.RentItemState
 import com.example.edistynyt_mobiiliohjelmointi.model.RentalItemState
 import com.example.edistynyt_mobiiliohjelmointi.model.RentalItemsState
 import kotlinx.coroutines.launch
-import kotlin.math.log
 
-class RentalItemsViewModel(savedStateHandle: SavedStateHandle): ViewModel() {
+class RentalItemsViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
 
     private val _categoryId = savedStateHandle.get<String>("categoryId")?.toIntOrNull() ?: 0
 
@@ -43,7 +37,6 @@ class RentalItemsViewModel(savedStateHandle: SavedStateHandle): ViewModel() {
 
     init {
         MainActivity.categoryId = _categoryId
-        Log.d("RENTER ID", MainActivity.userId.toString())
         getRentalItems()
     }
 
@@ -105,7 +98,7 @@ class RentalItemsViewModel(savedStateHandle: SavedStateHandle): ViewModel() {
                 }
                 _rentalItemsState.value = _rentalItemsState.value.copy(list = listOfItems)
                 _deleteRentalItemState.value = _deleteRentalItemState.value.copy(id = 0)
-            } catch (e:Exception) {
+            } catch (e: Exception) {
                 _deleteRentalItemState.value = _deleteRentalItemState.value.copy(err = e.toString())
             }
         }
@@ -131,7 +124,8 @@ class RentalItemsViewModel(savedStateHandle: SavedStateHandle): ViewModel() {
                         id = MainActivity.userId
                     )
                 )
-                _rentalItemsState.value = rentalItemsState.value.copy(list = _rentalItemsState.value.list + res)
+                _rentalItemsState.value =
+                    rentalItemsState.value.copy(list = _rentalItemsState.value.list + res)
                 toggleAddRentalItem()
             } catch (e: Exception) {
                 _addRentalItemState.value = _addRentalItemState.value.copy(err = e.toString())

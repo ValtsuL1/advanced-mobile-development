@@ -32,7 +32,7 @@ fun EditCategoryScreen(backToCategories: () -> Unit, goToCategories: () -> Unit)
     val vm: CategoryViewModel = viewModel()
 
     LaunchedEffect(key1 = vm.categoryState.value.ok) {
-        if(vm.categoryState.value.ok) {
+        if (vm.categoryState.value.ok) {
             vm.setOk(false)
             backToCategories()
         }
@@ -42,7 +42,10 @@ fun EditCategoryScreen(backToCategories: () -> Unit, goToCategories: () -> Unit)
         topBar = {
             TopAppBar(title = { Text(text = vm.categoryState.value.item.name) }, navigationIcon = {
                 IconButton(onClick = { backToCategories() }) {
-                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back To Categories")
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Back To Categories"
+                    )
                 }
             })
         }
@@ -67,7 +70,7 @@ fun EditCategoryScreen(backToCategories: () -> Unit, goToCategories: () -> Unit)
                     ) {
                         OutlinedTextField(
                             value = vm.categoryState.value.item.name,
-                            onValueChange = {vm.setName(it)}
+                            onValueChange = { vm.setName(it) }
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Button(onClick = { vm.editCategory(goToCategories) }) {

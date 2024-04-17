@@ -31,7 +31,6 @@ import com.example.edistynyt_mobiiliohjelmointi.view.CategoriesScreen
 import com.example.edistynyt_mobiiliohjelmointi.view.EditCategoryScreen
 import com.example.edistynyt_mobiiliohjelmointi.view.EditRentalItemScreen
 import com.example.edistynyt_mobiiliohjelmointi.view.LoginScreen
-import com.example.edistynyt_mobiiliohjelmointi.view.PostsScreen
 import com.example.edistynyt_mobiiliohjelmointi.view.RegisterScreen
 import com.example.edistynyt_mobiiliohjelmointi.view.RentalItemsScreen
 import com.example.edistynyt_mobiiliohjelmointi.viewmodel.LoginViewModel
@@ -43,6 +42,7 @@ class MainActivity : ComponentActivity() {
         var categoryId: Int = 0
         var isLoggedIn: Boolean = false
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
                         gesturesEnabled = true,
                         drawerContent = {
-                        ModalDrawerSheet {
+                            ModalDrawerSheet {
                                 Spacer(modifier = Modifier.height(16.dp))
 
                                 NavigationDrawerItem(
@@ -70,14 +70,16 @@ class MainActivity : ComponentActivity() {
                                     onClick = {
 
                                         scope.launch {
-                                            if(LoginViewModel().loginState.value.loginOk) {
+                                            if (LoginViewModel().loginState.value.loginOk) {
                                                 navController.navigate("categoriesScreen")
                                             }
                                             drawerState.close()
                                         }
                                     },
                                     icon = {
-                                        Icon(imageVector = Icons.Filled.Home, contentDescription = "Home"
+                                        Icon(
+                                            imageVector = Icons.Filled.Home,
+                                            contentDescription = "Home"
                                         )
                                     }
                                 )
@@ -93,7 +95,9 @@ class MainActivity : ComponentActivity() {
                                         }
                                     },
                                     icon = {
-                                        Icon(imageVector = Icons.Filled.AccountCircle, contentDescription = "Login"
+                                        Icon(
+                                            imageVector = Icons.Filled.AccountCircle,
+                                            contentDescription = "Login"
                                         )
                                     }
                                 )
@@ -104,7 +108,7 @@ class MainActivity : ComponentActivity() {
                         NavHost(
                             navController = navController,
                             startDestination = "loginScreen"
-                            ){
+                        ) {
 
                             composable("categoriesScreen") {
                                 CategoriesScreen(onMenuClick = {
@@ -139,10 +143,6 @@ class MainActivity : ComponentActivity() {
                                 RegisterScreen(goToLogin = {
                                     navController.navigate("loginScreen")
                                 })
-                            }
-
-                            composable("postsScreen") {
-                                PostsScreen()
                             }
 
                             composable("rentalItemsScreen/{categoryId}") {

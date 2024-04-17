@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,14 +22,16 @@ import com.example.edistynyt_mobiiliohjelmointi.viewmodel.LoginViewModel
 fun RegisterScreen(goToLogin: () -> Unit) {
     val vm: LoginViewModel = viewModel()
 
-    Box(){
+    Box() {
         when {
             vm.loginState.value.loading -> CircularProgressIndicator(
                 modifier = Modifier.align(
                     Alignment.Center
                 )
             )
-            else -> Column(modifier = Modifier.fillMaxSize(),
+
+            else -> Column(
+                modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {

@@ -15,7 +15,7 @@ import com.example.edistynyt_mobiiliohjelmointi.model.LoginState
 import com.example.edistynyt_mobiiliohjelmointi.model.LogoutState
 import kotlinx.coroutines.launch
 
-class LoginViewModel(private val db: AccountDatabase = DbProvider.db): ViewModel() {
+class LoginViewModel(private val db: AccountDatabase = DbProvider.db) : ViewModel() {
 
     private val _loginState = mutableStateOf(LoginState())
     val loginState: State<LoginState> = _loginState
@@ -28,9 +28,9 @@ class LoginViewModel(private val db: AccountDatabase = DbProvider.db): ViewModel
             try {
                 _loginState.value = _loginState.value.copy(loading = true)
                 val accessToken = db.accountDao().getToken()
-                if(accessToken != null) {
+                if (accessToken != null) {
                     val res = authService.getAccount("Bearer $accessToken")
-                    if(res.code() == 200){
+                    if (res.code() == 200) {
                         setLogin(true)
                         setUserId()
                     }

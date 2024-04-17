@@ -19,7 +19,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -54,7 +53,7 @@ fun EditRentalItemScreen(backToItems: () -> Unit, goToItems: (Int) -> Unit) {
                 vm.rentalItemState.value.loading -> CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
                 )
-                
+
                 vm.rentalItemState.value.err != null -> Text(text = "Error ${vm.rentalItemState.value.err}")
 
                 else -> {

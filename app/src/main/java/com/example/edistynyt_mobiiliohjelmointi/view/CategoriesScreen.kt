@@ -35,7 +35,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -77,7 +76,7 @@ fun AddCategoryDialog(
                 },
                 placeholder = { Text(text = "Category Name") })
         })
-}    
+}
 
 @Composable
 fun ConfirmCategoryDelete(
@@ -87,17 +86,17 @@ fun ConfirmCategoryDelete(
     errStr: String?
 ) {
     val context = LocalContext.current
-    
+
     LaunchedEffect(key1 = errStr) {
         errStr?.let {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
             clearErr()
         }
     }
-    
-    AlertDialog(onDismissRequest = { /*TODO*/ }, confirmButton =  {
+
+    AlertDialog(onDismissRequest = { /*TODO*/ }, confirmButton = {
         TextButton(onClick = { onConfirm() }) {
-            Text(text = "Delete") 
+            Text(text = "Delete")
         }
     }, dismissButton = {
         TextButton(onClick = { onCancel() }) {
@@ -115,7 +114,8 @@ fun ConfirmCategoryDelete(
 fun CategoriesScreen(
     onMenuClick: () -> Unit,
     navigateToEditCategory: (Int) -> Unit,
-    navigateToCategoryItems: (Int) -> Unit) {
+    navigateToCategoryItems: (Int) -> Unit
+) {
 
     val vm: CategoriesViewModel = viewModel()
     val isLoggedIn = MainActivity.isLoggedIn
@@ -125,7 +125,7 @@ fun CategoriesScreen(
         floatingActionButton = {
             FloatingActionButton(onClick = { vm.toggleAddCategory() }) {
                 Icon(imageVector = Icons.Filled.Add, contentDescription = "Add Category")
-            }                   
+            }
         },
         topBar = {
             TopAppBar(
@@ -135,11 +135,12 @@ fun CategoriesScreen(
                         Icon(Icons.Default.Menu, contentDescription = "Menu")
                     }
                 })
-    }) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(it)
-        ){
+        }) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+        ) {
             when {
                 vm.categoriesState.value.loading -> CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
@@ -149,9 +150,9 @@ fun CategoriesScreen(
 
                 vm.categoriesState.value.isAddingCategory -> AddCategoryDialog(
                     addCategory = { vm.createCategory() },
-                        name = vm.addCategoryState.value.name,
-                        setName = {newName -> vm.setName(newName)},
-                        closeDialog = {vm.toggleAddCategory()}
+                    name = vm.addCategoryState.value.name,
+                    setName = { newName -> vm.setName(newName) },
+                    closeDialog = { vm.toggleAddCategory() }
                 )
 
                 vm.deleteCategoryState.value.id > 0 -> ConfirmCategoryDelete(
@@ -180,15 +181,24 @@ fun CategoriesScreen(
                                         overflow = TextOverflow.Ellipsis
                                     )
                                     IconButton(onClick = { navigateToCategoryItems(it.id) }) {
-                                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Items")
+                                        Icon(
+                                            imageVector = Icons.Default.Menu,
+                                            contentDescription = "Items"
+                                        )
                                     }
                                     IconButton(enabled = isLoggedIn,
                                         onClick = { navigateToEditCategory(it.id) }) {
-                                        Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
+                                        Icon(
+                                            imageVector = Icons.Default.Edit,
+                                            contentDescription = "Edit"
+                                        )
                                     }
                                     IconButton(enabled = isLoggedIn,
                                         onClick = { vm.verifyCategoryRemoval(it.id) }) {
-                                        Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
+                                        Icon(
+                                            imageVector = Icons.Default.Delete,
+                                            contentDescription = "Delete"
+                                        )
                                     }
                                 }
                             }

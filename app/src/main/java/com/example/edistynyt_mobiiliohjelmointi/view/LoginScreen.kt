@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,7 +25,7 @@ import com.example.edistynyt_mobiiliohjelmointi.viewmodel.LoginViewModel
 fun LoginScreen(goToCategories: () -> Unit, goToRegister: () -> Unit) {
     val vm: LoginViewModel = viewModel()
     val context = LocalContext.current
-    
+
     LaunchedEffect(key1 = vm.loginState.value.err) {
         vm.loginState.value.err?.let {
             Toast.makeText(context, vm.loginState.value.err, Toast.LENGTH_LONG).show()
@@ -34,7 +33,7 @@ fun LoginScreen(goToCategories: () -> Unit, goToRegister: () -> Unit) {
     }
 
     LaunchedEffect(key1 = vm.loginState.value.loginOk) {
-        if(vm.loginState.value.loginOk) {
+        if (vm.loginState.value.loginOk) {
             vm.setLogin(false)
             goToCategories()
         }
@@ -53,7 +52,9 @@ fun LoginScreen(goToCategories: () -> Unit, goToRegister: () -> Unit) {
                     Alignment.Center
                 )
             )
-            else -> Column(modifier = Modifier.fillMaxSize(),
+
+            else -> Column(
+                modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -81,16 +82,16 @@ fun LoginScreen(goToCategories: () -> Unit, goToRegister: () -> Unit) {
                     enabled = vm.loginState.value.username != "" && vm.loginState.value.password != "",
                     onClick = {
                         vm.login()
-                        if(vm.loginState.value.loginOk) {
+                        if (vm.loginState.value.loginOk) {
                             goToCategories()
                         }
                     }
                 ) {
-                    Text(text = "Login") 
+                    Text(text = "Login")
                 }
                 Button(onClick = { goToRegister() }) {
                     Text(text = "Register")
-                } 
+                }
                 Button(onClick = { goToCategories() }) {
                     Text(text = "Continue As Guest")
                 }

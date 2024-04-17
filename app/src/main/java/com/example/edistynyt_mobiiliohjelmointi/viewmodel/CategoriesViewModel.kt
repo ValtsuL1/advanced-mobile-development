@@ -1,20 +1,15 @@
 package com.example.edistynyt_mobiiliohjelmointi.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.edistynyt_mobiiliohjelmointi.api.categoriesService
 import com.example.edistynyt_mobiiliohjelmointi.model.AddCategoryReq
 import com.example.edistynyt_mobiiliohjelmointi.model.AddCategoryState
 import com.example.edistynyt_mobiiliohjelmointi.model.CategoriesState
-import com.example.edistynyt_mobiiliohjelmointi.model.CategoryItem
 import com.example.edistynyt_mobiiliohjelmointi.model.DeleteCategoryState
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 class CategoriesViewModel: ViewModel() {
 
@@ -24,7 +19,7 @@ class CategoriesViewModel: ViewModel() {
     private val _deleteCategoryState = mutableStateOf(DeleteCategoryState())
     val deleteCategoryState: State<DeleteCategoryState> = _deleteCategoryState
 
-    private val  _addCategoryState = mutableStateOf(AddCategoryState())
+    private val _addCategoryState = mutableStateOf(AddCategoryState())
     val addCategoryState: State<AddCategoryState> = _addCategoryState
 
     init {
@@ -40,7 +35,8 @@ class CategoriesViewModel: ViewModel() {
                         name = _addCategoryState.value.name
                     )
                 )
-                _categoriesState.value = categoriesState.value.copy(list = _categoriesState.value.list + res)
+                _categoriesState.value =
+                    categoriesState.value.copy(list = _categoriesState.value.list + res)
                 toggleAddCategory()
             } catch (e: Exception) {
                 _addCategoryState.value = _addCategoryState.value.copy(err = e.toString())
@@ -85,9 +81,9 @@ class CategoriesViewModel: ViewModel() {
     private fun getCategories() {
         viewModelScope.launch {
             try {
-              _categoriesState.value = _categoriesState.value.copy(loading = true)
-              val res = categoriesService.getCategories()
-              _categoriesState.value = categoriesState.value.copy(list = res.categories)
+                _categoriesState.value = _categoriesState.value.copy(loading = true)
+                val res = categoriesService.getCategories()
+                _categoriesState.value = categoriesState.value.copy(list = res.categories)
             } catch (e: Exception) {
                 _categoriesState.value = _categoriesState.value.copy(err = e.toString())
             } finally {

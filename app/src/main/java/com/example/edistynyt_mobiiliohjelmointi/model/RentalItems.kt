@@ -42,7 +42,6 @@ data class RentalItem(
 )
 
 
-
 data class RentalItemsResponse(val items: List<RentalItem> = emptyList())
 
 data class RentalItemResponse(val item: RentalItem = RentalItem())

@@ -4,8 +4,6 @@ import com.example.edistynyt_mobiiliohjelmointi.model.AuthReq
 import com.example.edistynyt_mobiiliohjelmointi.model.AuthRes
 import com.example.edistynyt_mobiiliohjelmointi.model.UserId
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header

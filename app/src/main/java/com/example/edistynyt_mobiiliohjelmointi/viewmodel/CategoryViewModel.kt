@@ -1,7 +1,6 @@
 package com.example.edistynyt_mobiiliohjelmointi.viewmodel
 
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -12,7 +11,7 @@ import com.example.edistynyt_mobiiliohjelmointi.model.CategoryState
 import com.example.edistynyt_mobiiliohjelmointi.model.EditCategoryReq
 import kotlinx.coroutines.launch
 
-class CategoryViewModel(savedStateHandle: SavedStateHandle): ViewModel() {
+class CategoryViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
     private val _categoryId = savedStateHandle.get<String>("categoryId")?.toIntOrNull() ?: 0
 
     private val _categoryState = mutableStateOf(CategoryState())
