@@ -38,9 +38,8 @@ data class RentalItem(
     @SerializedName("rental_item_id")
     val id: Int = 0,
     @SerializedName("rental_item_name")
-    val name: String = ""
+    val name: String = "",
 )
-
 
 data class RentalItemsResponse(val items: List<RentalItem> = emptyList())
 

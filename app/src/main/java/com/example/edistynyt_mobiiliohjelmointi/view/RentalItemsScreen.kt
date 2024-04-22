@@ -134,6 +134,13 @@ fun RentalItemsScreen(
 ) {
     val vm: RentalItemsViewModel = viewModel()
     val isLoggedIn = MainActivity.isLoggedIn
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = vm.rentalItemState.value.err) {
+        vm.rentalItemState.value.err?.let {
+            Toast.makeText(context, vm.rentalItemState.value.err, Toast.LENGTH_LONG).show()
+        }
+    }
 
     Scaffold(
         floatingActionButtonPosition = FabPosition.Center,
@@ -207,7 +214,8 @@ fun RentalItemsScreen(
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis
                                     )
-                                    IconButton(onClick = { vm.verifyItemRental(it.id) }) {
+                                    IconButton(enabled = isLoggedIn,
+                                        onClick = { vm.verifyItemRental(it.id) }) {
                                         Icon(
                                             imageVector = Icons.Default.Add,
                                             contentDescription = "Rent Item"
